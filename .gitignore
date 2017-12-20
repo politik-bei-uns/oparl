@@ -1,0 +1,20 @@
+# Python
+webapp/config.py
+*.py[cod]
+
+# Mac OS-X
+.DS_Store
+._*
+*~
+
+# Enviroment
+venv
+migrations
+logs/*
+.idea
+
+# Node, Bower, SASS
+.sass-cache
+bower_components
+node_modules
+tmp

@@ -1,0 +1,5 @@
+gunicorn
+Flask
+Flask-Script
+Flask-MongoEngine
+python-dateutil
