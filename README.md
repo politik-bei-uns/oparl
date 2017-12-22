@@ -1,0 +1,1 @@
+"Politik bei uns"-OParl stellt eine OParl-API für in der MongoDB befindlichen "Politik bei uns"-Daten bereit. "Politik bei uns"-spezifische Inhalte erhalten dabei OParl-konform einen Prefix.
