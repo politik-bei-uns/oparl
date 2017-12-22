@@ -46,6 +46,14 @@ class Person(Document, OParlDocument):
     _object_db_name = 'person'
     _attribute = 'person'
 
+
+    @classmethod
+    def doc_modify(cls, doc):
+        if 'location' in doc:
+            doc['locationObject'] = doc['location']
+            del doc['location']
+        return doc
+
     def __init__(self, *args, **kwargs):
         super(Document, self).__init__(*args, **kwargs)
 

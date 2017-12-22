@@ -24,11 +24,11 @@ class Location(Document, OParlDocument):
     postalCode = StringField()
     subLocality = StringField()
     locality = StringField()
-    bodies = ListField(ReferenceField('Body', dbref=False, internal_output=False, delete_inline=True), default=[])
-    persons = ListField(ReferenceField('Person', dbref=False, internal_output=False, delete_inline=True), default=[])
-    organizations = ListField(ReferenceField('Organization', dbref=False, internal_output=False, delete_inline=True), default=[])
-    meetings = ListField(ReferenceField('Meeting', dbref=False, internal_output=False, delete_inline=True), default=[])
-    papers = ListField(ReferenceField('Paper', dbref=False, internal_output=False, delete_inline=True), default=[])
+    body = ListField(ReferenceField('Body', dbref=False, internal_output=False, delete_inline=True), default=[])
+    person = ListField(ReferenceField('Person', dbref=False, internal_output=False, delete_inline=True), default=[])
+    organization = ListField(ReferenceField('Organization', dbref=False, internal_output=False, delete_inline=True), default=[])
+    meeting = ListField(ReferenceField('Meeting', dbref=False, internal_output=False, delete_inline=True), default=[])
+    paper = ListField(ReferenceField('Paper', dbref=False, internal_output=False, delete_inline=True), default=[])
     license = StringField()
     keyword = ListField(StringField(), default=[])
     created = DateTimeField(datetime_format='datetime')
@@ -44,6 +44,16 @@ class Location(Document, OParlDocument):
     # Felder zur Verarbeitung
     _object_db_name = 'location'
     _attribute = 'location'
+
+    @classmethod
+    def doc_modify(self, doc):
+        if 'paper' in doc:
+            doc['papers'] = doc['paper']
+            del doc['paper']
+        if 'body' in doc:
+            doc['bodies'] = doc['body']
+            del doc['body']
+        return doc
 
     def __init__(self, *args, **kwargs):
         super(Document, self).__init__(*args, **kwargs)

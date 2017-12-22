@@ -70,14 +70,8 @@ class File(Document, OParlDocument):
     _object_db_name = 'file'
     _attribute = 'file'
 
-    # Verarbeitet Einzelergebnis vor Ausgabe
-    def to_mongo(self):
-        doc = super(Document, self).to_mongo()
-        # doc = oparl_doc_modify(doc, self)
-        return doc
-
     @classmethod
-    def doc_modify(self, doc):
+    def doc_modify(cls, doc):
         if 'body_id' in doc:
             doc['accessUrl'] = '%s/%s/%s/view' % (current_app.config['PROJECT_CDN_URL'], doc['body_id'], doc['_id'])
             doc['downloadUrl'] = '%s/%s/%s/download' % (

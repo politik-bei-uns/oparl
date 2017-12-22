@@ -24,7 +24,7 @@ class OParlQuerySet(QuerySet):
         doc = self.oparl_doc_modify(doc, self._document)
         return doc
 
-    def resolve(self, raw=False):
+    def resolve(self, raw=False, hide_inline=False):
         count = self.count()
         data = []
         rq = self.aggregate(*self._document.get_mongodb_default_pipeline())
@@ -32,11 +32,11 @@ class OParlQuerySet(QuerySet):
             if raw:
                 data.append(item)
             else:
-                data.append(self.oparl_doc_modify(item, self._document))
+                data.append(self.oparl_doc_modify(item, self._document, is_child=False, hide_inline=hide_inline))
         return OParlResult(data, count)
 
     @classmethod
-    def oparl_doc_modify(self, doc, doc_obj, is_child=False):
+    def oparl_doc_modify(self, doc, doc_obj, is_child=False, hide_inline=False):
         if hasattr(doc_obj, 'pre_doc_modify'):
             doc_obj.pre_doc_modify(doc)
         # transform id
@@ -59,7 +59,7 @@ class OParlQuerySet(QuerySet):
                 # process all list of reference fields
                 if doc_obj._fields[field].__class__.__name__ == 'ListField':
                     if doc_obj._fields[field].field.__class__.__name__ == 'ReferenceField':
-                        if hasattr(doc_obj._fields[field].field, 'delete_inline') and is_child:
+                        if hasattr(doc_obj._fields[field].field, 'delete_inline') and (is_child or hide_inline):
                             if doc_obj._fields[field].field.delete_inline:
                                 del doc[field]
                                 continue
@@ -72,7 +72,7 @@ class OParlQuerySet(QuerySet):
                                     field].field.document_type._object_db_name, doc[field][i])
                 # process all reference fields
                 elif doc_obj._fields[field].__class__.__name__ == 'ReferenceField':
-                    if hasattr(doc_obj._fields[field], 'delete_inline') and is_child:
+                    if hasattr(doc_obj._fields[field], 'delete_inline') and (is_child or hide_inline):
                         if doc_obj._fields[field].delete_inline:
                             del doc[field]
                             continue

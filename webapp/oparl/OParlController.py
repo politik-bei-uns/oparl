@@ -151,7 +151,7 @@ def oparl_body_consultation(body_id):
 def oparl_body_location(body_id):
     page = request.args.get('page', type=int, default=1)
     kwargs = generate_filter_kwargs(body_id)
-    kwargs['bodies__contains'] = body_id
+    kwargs['body__contains'] = body_id
     del kwargs['body']
     result = Location.objects(**kwargs)\
         .order_by('-modified')[page - 1:page * current_app.config['ITEMS_PER_PAGE'] - 1]\
