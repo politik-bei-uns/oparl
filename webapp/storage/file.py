@@ -54,6 +54,7 @@ class File(Document, OParlDocument):
 
     # Politik bei Uns Felder
     originalId = StringField(vendor_attribute=True)
+    mirrorId = StringField(vendor_attribute=True)
     originalWeb = StringField(vendor_attribute=True)
     originalAccessUrl = StringField(vendor_attribute=True)
     originalDownloadUrl = StringField(vendor_attribute=True)

@@ -10,16 +10,8 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-import json
-import time
-import datetime
-import dateutil.parser
-import math
-import urllib.parse
-from flask import (Flask, Blueprint, render_template, current_app, request, flash, url_for, redirect, session, abort,
-                   jsonify, send_from_directory)
-import flask
-from ..extensions import db
+import urllib
+from flask import (Blueprint, current_app, request, redirect, abort)
 from ..common.response import make_oparl_response
 from ..models import *
 from .OParlHelper import generate_filter_kwargs
@@ -62,7 +54,7 @@ def oparl_bodies():
 
 @oparl.route('/body-by-id')
 def oparl_body_id():
-    original_id = request.args.get('id', None)
+    original_id = urllib.parse.unquote_plus(request.args.get('id', None))
     if not original_id:
         abort(404)
     data = Body.objects(originalId=original_id).resolve().first()
