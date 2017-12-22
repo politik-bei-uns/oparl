@@ -9,9 +9,9 @@
 Um "Politik bei uns"-OParl zu installieren, brauchen wir zunächst die Dateien
 
 ```bash
-$ mkdir daemon
-$ cd daemon
-$ git clone https://github.com/politik-bei-uns/daemon.git .
+$ mkdir oparl
+$ cd oparl
+$ git clone https://github.com/politik-bei-uns/oparl.git .
 ```
 
 Anschließend benötigen wir ein Virtual Environment und alle Pakete:
@@ -27,7 +27,7 @@ $ cp webapp/config-dist.py webapp/config.py
 $ vim webapp/config.py
 ```
 
-Anschließend kann der "Politik bei uns"-OParl testweise gestartet werden. Auf Port 5000 lauscht dann der Development-Server und stellt dort eine OParl-API bereit.
+Anschließend kann "Politik bei uns"-OParl testweise gestartet werden. Auf Port 5000 lauscht dann der Development-Server und stellt dort eine OParl-API bereit.
 ```
 $ python runserver.py
 ```
