@@ -55,6 +55,9 @@ class File(Document, OParlDocument):
     # Politik bei Uns Felder
     originalId = StringField(vendor_attribute=True)
     mirrorId = StringField(vendor_attribute=True)
+    storedAtMirror = BooleanField(vendor_attribute=True)
+    mirrorDownloadUrl = StringField(vendor_attribute=True)
+    mirrorAccessUrl = StringField(vendor_attribute=True)
     originalWeb = StringField(vendor_attribute=True)
     originalAccessUrl = StringField(vendor_attribute=True)
     originalDownloadUrl = StringField(vendor_attribute=True)
@@ -74,9 +77,17 @@ class File(Document, OParlDocument):
     @classmethod
     def doc_modify(cls, doc):
         if 'body_id' in doc:
-            doc['accessUrl'] = '%s/%s/%s/view' % (current_app.config['PROJECT_CDN_URL'], doc['body_id'], doc['_id'])
-            doc['downloadUrl'] = '%s/%s/%s/download' % (
-            current_app.config['PROJECT_CDN_URL'], doc['body_id'], doc['_id'])
+            if current_app.config['VENDOR_PREFIX'] + ':storedAtMirror' in doc:
+                if doc[current_app.config['VENDOR_PREFIX'] + ':storedAtMirror'] == True:
+                    if current_app.config['VENDOR_PREFIX'] + ':mirrorAccessUrl' in doc:
+                        doc['accessUrl'] = doc[current_app.config['VENDOR_PREFIX'] + ':mirrorAccessUrl']
+                        del doc[current_app.config['VENDOR_PREFIX'] + ':mirrorAccessUrl']
+                    if current_app.config['VENDOR_PREFIX'] + ':mirrorDownloadUrl' in doc:
+                        doc['downloadUrl'] = doc[current_app.config['VENDOR_PREFIX'] + ':mirrorDownloadUrl']
+                        del doc[current_app.config['VENDOR_PREFIX'] + ':mirrorDownloadUrl']
+            else:
+                doc['accessUrl'] = '%s/%s/%s/view' % (current_app.config['PROJECT_CDN_URL'], doc['body_id'], doc['_id'])
+                doc['downloadUrl'] = '%s/%s/%s/download' % (current_app.config['PROJECT_CDN_URL'], doc['body_id'], doc['_id'])
         return doc
 
     def __init__(self, *args, **kwargs):
