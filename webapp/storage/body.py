@@ -50,7 +50,6 @@ class Body(Document, OParlDocument):
 
     @classmethod
     def doc_modify(cls, doc):
-        doc['legislativeTerm'] = "%s/body/%s/legislative_term" % (current_app.config['PROJECT_URL'], doc['_id'])
         doc['organization'] = "%s/body/%s/organization" % (current_app.config['PROJECT_URL'], doc['_id'])
         doc['membership'] = "%s/body/%s/membership" % (current_app.config['PROJECT_URL'], doc['_id'])
         doc['person'] = "%s/body/%s/person" % (current_app.config['PROJECT_URL'], doc['_id'])
