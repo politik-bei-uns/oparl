@@ -27,7 +27,7 @@ class OParlQuerySet(QuerySet):
     def resolve(self, raw=False, hide_inline=False):
         count = self.count()
         data = []
-        rq = self.aggregate(*self._document.get_mongodb_default_pipeline())
+        rq = self.aggregate(*self._document.get_mongodb_default_pipeline(), allowDiskUse=True)
         for item in rq:
             if raw:
                 data.append(item)
