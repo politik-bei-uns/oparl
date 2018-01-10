@@ -53,8 +53,8 @@ class AgendaItem(Document, OParlDocument):
                 doc['resolutionFile'] = File.objects(pk=str(doc['resolutionFile'])).resolve(raw=True).first()
         if 'auxiliaryFile' in doc:
             for i in range(0, len(doc['auxiliaryFile'])):
-                if type(doc['auxiliaryFile']) == ObjectId:
-                    doc['auxiliaryFile'][i] = File.objects(pk=str(doc['resolutionFile'][i])).resolve(raw=True).first()
+                if type(doc['auxiliaryFile'][i]) == ObjectId:
+                    doc['auxiliaryFile'][i] = File.objects(pk=str(doc['auxiliaryFile'][i])).resolve(raw=True).first()
         return doc
 
     def __init__(self, *args, **kwargs):
