@@ -59,7 +59,7 @@ class Body(Document, OParlDocument):
         doc['agendaItem'] = "%s/body/%s/agenda_item" % (current_app.config['PROJECT_URL'], doc['_id'])
         doc['paper'] = "%s/body/%s/paper" % (current_app.config['PROJECT_URL'], doc['_id'])
         doc['consultation'] = "%s/body/%s/consultation" % (current_app.config['PROJECT_URL'], doc['_id'])
-        doc['location'] = "%s/body/%s/location" % (current_app.config['PROJECT_URL'], doc['_id'])
+        doc['locationList'] = "%s/body/%s/location" % (current_app.config['PROJECT_URL'], doc['_id'])
         doc['file'] = "%s/body/%s/file" % (current_app.config['PROJECT_URL'], doc['_id'])
         return doc
 

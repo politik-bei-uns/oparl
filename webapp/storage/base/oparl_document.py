@@ -21,6 +21,38 @@ class OParlDocument(object):
     @classmethod
     def get_mongodb_default_pipeline(cls):
         pipeline = []
+
+        for field in cls._fields:
+            if cls._fields[field].__class__.__name__ == 'ListField':
+                if cls._fields[field].field.__class__.__name__ == 'ReferenceField':
+                    if cls._fields[field].field.internal_output:
+                            pipeline.append({
+                                '$lookup': {
+                                    'from': cls._fields[field].field.document_type._object_db_name,
+                                    'as': field,
+                                    'foreignField': '_id',
+                                    'localField': field
+                                }
+                            })
+
+            elif cls._fields[field].__class__.__name__ == 'ReferenceField':
+                if cls._fields[field].internal_output:
+                    pipeline.append({
+                        '$lookup': {
+                            'from': cls._fields[field].document_type._object_db_name,
+                            'as': field,
+                            'foreignField': '_id',
+                            'localField': field
+                        }
+                    })
+        return pipeline
+
+
+
+
+
+        """
+        pipeline = []
         pipeline_group = {
             "_id": "$_id"
         }
@@ -48,8 +80,13 @@ class OParlDocument(object):
                                 "preserveNullAndEmptyArrays": True
                             }
                         })
+                        pipeline.append({
+                            '$sort': {
+                                "agendaItem.name": 1
+                            }
+                        })
                         pipeline_group[field] = {
-                            "$addToSet": "$" + field
+                            "$push": "$" + field
                         }
             elif cls._fields[field].__class__.__name__ == 'ReferenceField':
                 if cls._fields[field].internal_output:
@@ -90,3 +127,4 @@ class OParlDocument(object):
                     "$first": "$" + field_name
                 }
         return pipeline
+        """

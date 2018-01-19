@@ -54,6 +54,7 @@ class OParlQuerySet(QuerySet):
                 del doc['deleted']
         local_time_zone = dateutil.tz.gettz('Europe/Berlin')
         utc_time_zone = dateutil.tz.gettz('UTC')
+
         for field in doc_obj._fields:
             if field in doc:
                 # process all list of reference fields
@@ -77,7 +78,10 @@ class OParlQuerySet(QuerySet):
                             del doc[field]
                             continue
                     if doc_obj._fields[field].internal_output:
-                        doc[field] = self.oparl_doc_modify(doc[field], doc_obj._fields[field].document_type, True)
+                        if is_child:
+                            doc[field] = self.oparl_doc_modify(doc[field], doc_obj._fields[field].document_type, True)
+                        else:
+                            doc[field] = self.oparl_doc_modify(doc[field][0], doc_obj._fields[field].document_type, True)
                     else:
                         doc[field] = "%s/%s/%s" % (
                         current_app.config['PROJECT_URL'], doc_obj._fields[field].document_type._object_db_name,
@@ -96,6 +100,57 @@ class OParlQuerySet(QuerySet):
                     if doc_obj._fields[field].vendor_attribute:
                         doc['%s:%s' % (current_app.config['VENDOR_PREFIX'], field)] = doc[field]
                         del doc[field]
+
+
+
+        """
+        for field in doc_obj._fields:
+            if field in doc:
+                # process all list of reference fields
+                if doc_obj._fields[field].__class__.__name__ == 'ListField':
+                    if doc_obj._fields[field].field.__class__.__name__ == 'ReferenceField':
+                        if hasattr(doc_obj._fields[field].field, 'delete_inline') and (is_child or hide_inline):
+                            if doc_obj._fields[field].field.delete_inline:
+                                del doc[field]
+                                continue
+                        if doc_obj._fields[field].field.internal_output:
+                            for i in range(0, len(doc[field])):
+                                doc[field][i] = self.oparl_doc_modify(doc[field][i], doc_obj._fields[field].field.document_type, True)
+                        else:
+                            for i in range(0, len(doc[field])):
+                                doc[field][i] = "%s/%s/%s" % (current_app.config['PROJECT_URL'], doc_obj._fields[
+                                    field].field.document_type._object_db_name, doc[field][i])
+                # process all reference fields
+                elif doc_obj._fields[field].__class__.__name__ == 'ReferenceField':
+                    if hasattr(doc_obj._fields[field], 'delete_inline') and (is_child or hide_inline):
+                        if doc_obj._fields[field].delete_inline:
+                            del doc[field]
+                            continue
+                    if doc_obj._fields[field].internal_output:
+                        print(doc[field])
+                        if len(doc[field]):
+                            doc[field] = self.oparl_doc_modify(doc[field][0], doc_obj._fields[field].document_type, True)
+                        else:
+                            del doc[field]
+                    else:
+                        doc[field] = "%s/%s/%s" % (
+                        current_app.config['PROJECT_URL'], doc_obj._fields[field].document_type._object_db_name,
+                        doc[field])
+                # process all datetime fields
+                elif doc_obj._fields[field].__class__.__name__ == 'DateTimeField':
+                    if type(doc[field]) == str:  # SHOULD NEVER HAPPEN!
+                        doc[field] = dateutil.parser.parse(doc[field])
+                    if doc_obj._fields[field].datetime_format == 'datetime':
+                        doc[field] = doc[field].replace(tzinfo=utc_time_zone).astimezone(local_time_zone).isoformat()
+                    elif doc_obj._fields[field].datetime_format == 'date':
+                        doc[field] = doc[field].replace(tzinfo=utc_time_zone).astimezone(local_time_zone).strftime(
+                            '%Y-%m-%d')
+                # prefix everything which is vendor specific
+                if hasattr(doc_obj._fields[field], 'vendor_attribute'):
+                    if doc_obj._fields[field].vendor_attribute:
+                        doc['%s:%s' % (current_app.config['VENDOR_PREFIX'], field)] = doc[field]
+                        del doc[field]
+        """
         # Objektspezifische Weiterverarbeitung (falls vorhanden)
         if hasattr(doc_obj, 'doc_modify'):
             doc_obj.doc_modify(doc)
