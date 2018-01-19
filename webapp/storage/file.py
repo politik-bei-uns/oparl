@@ -68,7 +68,7 @@ class File(Document, OParlDocument):
     thumbnailStatus = StringField(vendor_attribute=True)
     georeferencesGenerated = DateTimeField(datetime_format='datetime', vendor_attribute=True)
     georeferencesStatus = StringField(vendor_attribute=True)
-    thumbnail = DictField(vendor_attribute=True)
+    thumbnail = DictField(vendor_attribute=True, delete_always=True)
     pages = IntField(vendor_attribute=True)
 
     # Felder zur Verarbeitung

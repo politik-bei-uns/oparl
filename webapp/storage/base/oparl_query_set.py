@@ -57,6 +57,10 @@ class OParlQuerySet(QuerySet):
 
         for field in doc_obj._fields:
             if field in doc:
+                if hasattr(doc_obj._fields[field], 'delete_always'):
+                    if doc_obj._fields[field].delete_always:
+                        del doc[field]
+                        continue
                 # process all list of reference fields
                 if doc_obj._fields[field].__class__.__name__ == 'ListField':
                     if doc_obj._fields[field].field.__class__.__name__ == 'ReferenceField':
