@@ -43,6 +43,7 @@ class Location(Document, OParlDocument):
     street = ReferenceField('Street', vendor_attribute=True, delete_always=True)
     streetNumber = ReferenceField('StreetNumber', vendor_attribute=True, delete_always=True)
     locationType = StringField(vendor_attribute=True)  # could be street, address, point-of-interest
+    region = ReferenceField('Region', vendor_attribute=True, delete_always=True)
 
     # Felder zur Verarbeitung
     _object_db_name = 'location'
