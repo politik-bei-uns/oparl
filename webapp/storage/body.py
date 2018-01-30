@@ -12,7 +12,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 from flask import current_app
 from mongoengine import Document, BooleanField, ReferenceField, DateTimeField, StringField, ListField, DecimalField, \
-    GeoJsonBaseField
+    GeoJsonBaseField, DictField
 from .base.oparl_document import OParlDocument
 
 
@@ -45,6 +45,8 @@ class Body(Document, OParlDocument):
     lastSync = DateTimeField(datetime_format='datetime', vendor_attribute=True)
     storageId = StringField(vendor_attribute=True)
     mirrorId = StringField(vendor_attribute=True)
+    statistics = DictField(vendor_attribute=True)
+    region = ReferenceField('Region', vendor_attribute=True, internal_output=False, delete_always=True)
 
     # Felder zur Verarbeitung
     _object_db_name = 'body'
