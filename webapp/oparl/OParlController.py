@@ -47,8 +47,8 @@ def oparl_system():
 def oparl_bodies():
     page = request.args.get('page', type=int, default=1)
     result = Body.objects(**generate_filter_kwargs())\
-        .order_by('-modified')[page - 1:page * current_app.config['ITEMS_PER_PAGE'] - 1]\
-        .resolve()\
+        .order_by('-modified')\
+        .resolve(page)\
         .page(base_url='%s/bodies' % (current_app.config['PROJECT_URL']),page=page)
     return make_oparl_response(result)
 
