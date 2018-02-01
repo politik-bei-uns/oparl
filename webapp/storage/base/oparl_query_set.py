@@ -29,8 +29,8 @@ class OParlQuerySet(QuerySet):
         data = []
         args = self._document.get_mongodb_default_pipeline()
         if page != False:
-            args.append({ "$limit": page * current_app.config['ITEMS_PER_PAGE'] })\
-                .append({ "$skip": (page - 1) * current_app.config['ITEMS_PER_PAGE'] })
+            args.append({ "$limit": page * current_app.config['ITEMS_PER_PAGE'] })
+            args.append({ "$skip": (page - 1) * current_app.config['ITEMS_PER_PAGE'] })
         rq = self.aggregate(*args, allowDiskUse=True)
         for item in rq:
             if raw:
