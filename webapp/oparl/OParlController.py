@@ -70,8 +70,8 @@ def oparl_body_legislative_term(body_id):
     page = request.args.get('page', type=int, default=1)
     fastsync = request.args.get('fastsync', type=int, default=0)
     result = LegislativeTerm.objects(**generate_filter_kwargs(body_id))\
-        .order_by('-modified')[page - 1:page * current_app.config['ITEMS_PER_PAGE'] - 1]\
-        .resolve()\
+        .order_by('-modified')\
+        .resolve(page)\
         .page(base_url='%s/body/%s/legislative_term' % (current_app.config['PROJECT_URL'], body_id), page=page)
     return make_oparl_response(result)
 
@@ -79,8 +79,8 @@ def oparl_body_legislative_term(body_id):
 def oparl_body_organization(body_id):
     page = request.args.get('page', type=int, default=1)
     result = Organization.objects(**generate_filter_kwargs(body_id))\
-        .order_by('-modified')[page - 1:page * current_app.config['ITEMS_PER_PAGE'] - 1]\
-        .resolve()\
+        .order_by('-modified')\
+        .resolve(page)\
         .page(base_url='%s/body/%s/organization' % (current_app.config['PROJECT_URL'], body_id), page=page)
     return make_oparl_response(result)
 
@@ -89,8 +89,8 @@ def oparl_body_organization(body_id):
 def oparl_body_person(body_id):
     page = request.args.get('page', type=int, default=1)
     result = Person.objects(**generate_filter_kwargs(body_id))\
-        .order_by('-modified')[page - 1:page * current_app.config['ITEMS_PER_PAGE'] - 1]\
-        .resolve()\
+        .order_by('-modified')\
+        .resolve(page)\
         .page(base_url='%s/body/%s/person' % (current_app.config['PROJECT_URL'], body_id), page=page)
     return make_oparl_response(result)
 
@@ -98,8 +98,8 @@ def oparl_body_person(body_id):
 def oparl_body_membership(body_id):
     page = request.args.get('page', type=int, default=1)
     result = Membership.objects(**generate_filter_kwargs(body_id))\
-        .order_by('-modified')[page - 1:page * current_app.config['ITEMS_PER_PAGE'] - 1]\
-        .resolve()\
+        .order_by('-modified')\
+        .resolve(page)\
         .page(base_url='%s/body/%s/membership' % (current_app.config['PROJECT_URL'], body_id), page=page)
     return make_oparl_response(result)
 
@@ -107,8 +107,8 @@ def oparl_body_membership(body_id):
 def oparl_body_meeting(body_id):
     page = request.args.get('page', type=int, default=1)
     result = Meeting.objects(**generate_filter_kwargs(body_id))\
-        .order_by('-modified')[page - 1:page * current_app.config['ITEMS_PER_PAGE'] - 1]\
-        .resolve()\
+        .order_by('-modified')\
+        .resolve(page)\
         .page(base_url='%s/body/%s/meeting' % (current_app.config['PROJECT_URL'], body_id), page=page)
     return make_oparl_response(result)
 
@@ -116,8 +116,8 @@ def oparl_body_meeting(body_id):
 def oparl_body_agenda_item(body_id):
     page = request.args.get('page', type=int, default=1)
     result = AgendaItem.objects(**generate_filter_kwargs(body_id))\
-        .order_by('-modified')[page - 1:page * current_app.config['ITEMS_PER_PAGE'] - 1]\
-        .resolve()\
+        .order_by('-modified')\
+        .resolve(page)\
         .page(base_url='%s/body/%s/agenda_item' % (current_app.config['PROJECT_URL'], body_id), page=page)
     return make_oparl_response(result)
 
@@ -125,8 +125,8 @@ def oparl_body_agenda_item(body_id):
 def oparl_body_paper(body_id):
     page = request.args.get('page', type=int, default=1)
     result = Paper.objects(**generate_filter_kwargs(body_id))\
-        .order_by('-modified')[page - 1:page * current_app.config['ITEMS_PER_PAGE'] - 1]\
-        .resolve()\
+        .order_by('-modified')\
+        .resolve(page)\
         .page(base_url='%s/body/%s/paper' % (current_app.config['PROJECT_URL'], body_id), page=page)
     return make_oparl_response(result)
 
@@ -134,8 +134,8 @@ def oparl_body_paper(body_id):
 def oparl_body_consultation(body_id):
     page = request.args.get('page', type=int, default=1)
     result = Consultation.objects(**generate_filter_kwargs(body_id))\
-        .order_by('-modified')[page - 1:page * current_app.config['ITEMS_PER_PAGE'] - 1]\
-        .resolve()\
+        .order_by('-modified')\
+        .resolve(page)\
         .page(base_url='%s/body/%s/consultation' % (current_app.config['PROJECT_URL'], body_id), page=page)
     return make_oparl_response(result)
 
@@ -146,8 +146,8 @@ def oparl_body_location(body_id):
     kwargs['body__contains'] = body_id
     del kwargs['body']
     result = Location.objects(**kwargs)\
-        .order_by('-modified')[page - 1:page * current_app.config['ITEMS_PER_PAGE'] - 1]\
-        .resolve()\
+        .order_by('-modified')\
+        .resolve(page)\
         .page(base_url='%s/body/%s/location' % (current_app.config['PROJECT_URL'], body_id), page=page)
     return make_oparl_response(result)
 
@@ -155,8 +155,8 @@ def oparl_body_location(body_id):
 def oparl_body_file(body_id):
     page = request.args.get('page', type=int, default=1)
     result = File.objects(**generate_filter_kwargs(body_id))\
-        .order_by('-modified')[page - 1:page * current_app.config['ITEMS_PER_PAGE'] - 1]\
-        .resolve()\
+        .order_by('-modified')\
+        .resolve(page)\
         .page(base_url='%s/body/%s/file' % (current_app.config['PROJECT_URL'], body_id), page=page)
     return make_oparl_response(result)
 
@@ -176,8 +176,8 @@ def oparl_organization_meeting(id):
     page = request.args.get('page', type=int, default=1)
     additional_limits = {'organization': id}
     result = Meeting.objects(**generate_filter_kwargs(body_id=False, additional_limits=additional_limits))\
-        .order_by('-modified')[page - 1:page * current_app.config['ITEMS_PER_PAGE'] - 1]\
-        .resolve()\
+        .order_by('-modified')\
+        .resolve(page)\
         .page(base_url='%s/organization/%s/meeting' % (current_app.config['PROJECT_URL'], id), page=page)
     return make_oparl_response(result)
 

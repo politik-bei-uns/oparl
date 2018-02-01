@@ -24,10 +24,11 @@ class OParlQuerySet(QuerySet):
         doc = self.oparl_doc_modify(doc, self._document)
         return doc
 
-    def resolve(self, raw=False, hide_inline=False):
+    def resolve(self, page, raw=False, hide_inline=False):
         count = self.count()
         data = []
-        rq = self.aggregate(*self._document.get_mongodb_default_pipeline(), allowDiskUse=True)
+        args = self._document.get_mongodb_default_pipeline() + [{ "$limit": page * current_app.config['ITEMS_PER_PAGE'] },{ "$skip": (page - 1) * current_app.config['ITEMS_PER_PAGE'] }]
+        rq = self.aggregate(*args, allowDiskUse=True)
         for item in rq:
             if raw:
                 data.append(item)

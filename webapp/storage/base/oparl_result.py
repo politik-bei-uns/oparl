@@ -12,6 +12,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 import math
 from flask import current_app
+from flask import current_app, request
 
 
 class OParlResult(object):
@@ -35,6 +36,13 @@ class OParlResult(object):
 
     def page(self, base_url='', page=1, fastsync=0):
         total_pages = math.ceil(self._count / current_app.config['ITEMS_PER_PAGE'])
+
+        args = []
+        for item in ['created_since', 'created_until', 'modified_since', 'modified_until']:
+            data = request.args.get(item, default=None)
+            if data:
+                args.append(item + '=' + data)
+
         result = {
             'data': self._data,
             'pagination': {
@@ -44,13 +52,22 @@ class OParlResult(object):
                 "totalPages": total_pages
             },
             'links': {
-                "first": base_url,
-                "self": base_url + ('?page=' + str(page) if page > 1 else ''),
-                "last": base_url + ('?page=' + str(total_pages) if total_pages > 1 else '')
+                "first": self.generate_params(base_url, args),
+                "self": self.generate_params(base_url, args, page if page > 1 else False),
+                "last": self.generate_params(base_url, args, total_pages if total_pages > 1 else False)
             }
         }
         if page != 1:
-            result['links']['prev'] = base_url + ('?page=' + str(page - 1) if page - 1 > 1 else '')
+            result['links']['prev'] = self.generate_params(base_url, args, (page - 1) if (page - 1) > 1 else False)
         if page != total_pages and total_pages != 0:
-            result['links']['next'] = base_url + '?page=' + str(page + 1)
+            result['links']['next'] = self.generate_params(base_url, args, (page + 1) if (page + 1) > 1 else False)
         return result
+
+    def generate_params(self, base_url, params, page=False):
+        url = base_url
+        if len(params) or page != False:
+            url += '?'
+            if page:
+                params = params + ['page=' + str(page)]
+            url += '&'.join(params)
+        return url
