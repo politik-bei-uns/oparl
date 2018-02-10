@@ -26,6 +26,10 @@ class LocationOrigin(Document):
     meeting = ReferenceField('Meeting', internal_output=False)
     user = ReferenceField('User', internal_output=False, delete_always=True)
 
+    # Felder zur Verarbeitung
+    _object_db_name = 'location_origin'
+    _attribute = 'location_origin'
+
     def __init__(self, *args, **kwargs):
         super(Document, self).__init__(*args, **kwargs)
 
