@@ -15,6 +15,8 @@ from mongoengine import Document, BooleanField, ReferenceField, DateTimeField, S
     EmbeddedDocument
 
 class LocationOrigin(Document):
+    type = 'https://schema.politik-bei-uns.de/1.0/LocationOrigin'
+
     origin = StringField() # ris, auto, user
     action = StringField() # add, remove
 
