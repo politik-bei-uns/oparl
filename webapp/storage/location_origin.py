@@ -20,8 +20,8 @@ class LocationOrigin(Document):
     origin = StringField() # ris, auto, user
     action = StringField() # add, remove
 
-    created = DateTimeField(default=datetime.datetime.now())
-    modified = DateTimeField(default=datetime.datetime.now())
+    created = DateTimeField(default=datetime.datetime.now(), datetime_format='datetime')
+    modified = DateTimeField(default=datetime.datetime.now(), datetime_format='datetime')
 
     location = ReferenceField('Location', internal_output=False)
     paper = ReferenceField('Paper', internal_output=False)

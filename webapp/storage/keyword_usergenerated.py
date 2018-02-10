@@ -20,8 +20,8 @@ class KeywordUsergenerated(Document):
     keyword = StringField(fulltext=True)
     user = ReferenceField('User')
 
-    created = DateTimeField(default=datetime.datetime.now())
-    modified = DateTimeField(default=datetime.datetime.now())
+    created = DateTimeField(default=datetime.datetime.now(), datetime_format='datetime')
+    modified = DateTimeField(default=datetime.datetime.now(), datetime_format='datetime')
 
     paper = ReferenceField('Paper')
     meeting = ReferenceField('Meeting')
