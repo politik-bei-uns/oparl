@@ -10,18 +10,24 @@ Redistribution and use in source and binary forms, with or without modification,
 THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 """
 
-from .agenda_item import AgendaItem
-from .body import Body
-from .consultation import Consultation
-from .file import File
-from .legislative_term import LegislativeTerm
-from .location import Location
-from .meeting import Meeting
-from .membership import Membership
-from .organization import Organization
-from .paper import Paper
-from .person import Person
-from .street import Street
-from .street_number import StreetNumber
-from .keyword_usergenerated import KeywordUsergenerated
-from .location_origin import LocationOrigin
+import datetime
+from mongoengine import Document, BooleanField, ReferenceField, DateTimeField, StringField, ListField, DecimalField, \
+    EmbeddedDocument
+
+class LocationOrigin(Document):
+    origin = StringField() # ris, auto, user
+    action = StringField() # add, remove
+
+    created = DateTimeField(default=datetime.datetime.now())
+    modified = DateTimeField(default=datetime.datetime.now())
+
+    location = ReferenceField('Location', internal_output=False)
+    paper = ReferenceField('Paper', internal_output=False)
+    meeting = ReferenceField('Meeting', internal_output=False)
+    user = ReferenceField('User', internal_output=False, delete_always=True)
+
+    def __init__(self, *args, **kwargs):
+        super(Document, self).__init__(*args, **kwargs)
+
+    def __repr__(self):
+        return '<LocationOrigin %r>' % self.origin

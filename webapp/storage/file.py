@@ -35,6 +35,7 @@ class File(Document, OParlDocument):
     date = DateTimeField(datetime_format='date')
     size = DecimalField()
     sha1Checksum = StringField()
+    sha512Checksum = StringField()
     text = StringField()
     accessUrl = StringField()
     downloadUrl = StringField()
@@ -70,7 +71,7 @@ class File(Document, OParlDocument):
     georeferencesStatus = StringField(vendor_attribute=True)
     thumbnail = DictField(vendor_attribute=True, delete_always=True)
     pages = IntField(vendor_attribute=True)
-    keyword_usergenerated = ListField(ReferenceField('KeywordUsergenerated', dbref=False, internal_output=True))
+    keywordUsergenerated = ListField(ReferenceField('KeywordUsergenerated', dbref=False, internal_output=True))
 
 
     # Felder zur Verarbeitung

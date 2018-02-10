@@ -43,7 +43,8 @@ class Paper(Document, OParlDocument):
     originalId = StringField(vendor_attribute=True)
     legacy = BooleanField(vendor_attribute=True)
     mirrorId = StringField(vendor_attribute=True)
-    keyword_usergenerated = ListField(ReferenceField('KeywordUsergenerated', dbref=False, internal_output=True))
+    keywordUsergenerated = ListField(ReferenceField('KeywordUsergenerated', dbref=False, internal_output=True))
+    locationOrigin = ListField(ReferenceField('LocationOrigin'), vendor_attribute=True, internal_output=True)
 
 
     # Felder zur Verarbeitung
