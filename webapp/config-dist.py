@@ -38,6 +38,7 @@ class DefaultConfig(object):
     S3_SECURE = False
     S3_BUCKET = ''
     S3_LOCATION = 'us-east-1'
+    S3_DEBUG = False
 
     OPARL_NAME = ''
     OPARL_CONTACT_NAME = ''

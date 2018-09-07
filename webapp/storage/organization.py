@@ -17,7 +17,7 @@ from .base.oparl_document import OParlDocument
 
 
 class Organization(Document, OParlDocument):
-    type = 'https://schema.oparl.org/1.0/Organization'
+    type = 'https://schema.oparl.org/1.1/Organization'
     body = ReferenceField('Body', dbref=False, internal_output=False)
     name = StringField()
     membership = ListField(ReferenceField('Membership', dbref=False, internal_output=False))

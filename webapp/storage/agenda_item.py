@@ -18,7 +18,7 @@ from bson.objectid import ObjectId
 
 
 class AgendaItem(Document, OParlDocument):
-    type = 'https://schema.oparl.org/1.0/AgendaItem'
+    type = 'https://schema.oparl.org/1.1/AgendaItem'
     body = ReferenceField('Body', dbref=False, internal_output=False, delete_inline=True)
     meeting = ReferenceField('Meeting', dbref=False, internal_output=False, delete_inline=True)
     number = StringField()

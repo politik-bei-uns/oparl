@@ -27,7 +27,7 @@ class File(Document, OParlDocument):
         ]
     }
 
-    type = 'https://schema.oparl.org/1.0/File'
+    type = 'https://schema.oparl.org/1.1/File'
     body = ReferenceField('Body', dbref=False, internal_output=False)
     name = StringField()
     fileName = StringField()
@@ -90,6 +90,9 @@ class File(Document, OParlDocument):
                     if current_app.config['VENDOR_PREFIX'] + ':mirrorDownloadUrl' in doc:
                         doc['downloadUrl'] = doc[current_app.config['VENDOR_PREFIX'] + ':mirrorDownloadUrl']
                         del doc[current_app.config['VENDOR_PREFIX'] + ':mirrorDownloadUrl']
+            elif current_app.config['S3_DEBUG']:
+                doc['accessUrl'] = '%s/%s/%s' % (current_app.config['PROJECT_CDN_URL'], doc['body_id'], doc['_id'])
+                doc['downloadUrl'] = '%s/%s/%s' % (current_app.config['PROJECT_CDN_URL'], doc['body_id'], doc['_id'])
             else:
                 doc['accessUrl'] = '%s/%s/%s/view' % (current_app.config['PROJECT_CDN_URL'], doc['body_id'], doc['_id'])
                 doc['downloadUrl'] = '%s/%s/%s/download' % (current_app.config['PROJECT_CDN_URL'], doc['body_id'], doc['_id'])

@@ -16,7 +16,7 @@ from .base.oparl_document import OParlDocument
 
 
 class Person(Document, OParlDocument):
-    type = 'https://schema.oparl.org/1.0/Person'
+    type = 'https://schema.oparl.org/1.1/Person'
     body = ReferenceField('Body', dbref=False, internal_output=False)
     name = StringField()
     familyName = StringField()
@@ -52,7 +52,7 @@ class Person(Document, OParlDocument):
     def doc_modify(cls, doc):
         if 'location' in doc:
             doc['locationObject'] = doc['location']
-            del doc['location']
+            doc['location'] = doc['locationObject']['id']
         return doc
 
     def __init__(self, *args, **kwargs):

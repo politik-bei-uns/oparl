@@ -16,7 +16,7 @@ from .base.oparl_document import OParlDocument
 
 
 class LegislativeTerm(Document, OParlDocument):
-    type = 'https://schema.oparl.org/1.0/LegislativeTerm'
+    type = 'https://schema.oparl.org/1.1/LegislativeTerm'
     body = ReferenceField('Body', dbref=False, internal_output=False, delete_inline=True)
     name = StringField()
     startDate = DateTimeField(datetime_format='date')

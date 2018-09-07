@@ -16,7 +16,7 @@ from .base.oparl_document import OParlDocument
 
 
 class Consultation(Document, OParlDocument):
-    type = 'https://schema.oparl.org/1.0/Consultation'
+    type = 'https://schema.oparl.org/1.1/Consultation'
     body = ReferenceField('Body', dbref=False, internal_output=False, delete_inline=True)
     paper = ReferenceField('Paper', dbref=False, internal_output=False, delete_inline=True)
     agendaItem = ReferenceField('AgendaItem', dbref=False, internal_output=False)
@@ -42,4 +42,4 @@ class Consultation(Document, OParlDocument):
         super(Document, self).__init__(*args, **kwargs)
 
     def __repr__(self):
-        return '<Consultation %r>' % self.name
+        return '<Consultation %r>' % self.id

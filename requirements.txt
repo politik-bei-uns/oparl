@@ -2,4 +2,5 @@ gunicorn
 Flask
 Flask-Script
 Flask-MongoEngine
+Flask-Failsafe
 python-dateutil

@@ -17,7 +17,7 @@ from .base.oparl_document import OParlDocument
 
 
 class Body(Document, OParlDocument):
-    type = 'https://schema.oparl.org/1.0/Body'
+    type = 'https://schema.oparl.org/1.1/Body'
     shortName = StringField()
     name = StringField()
     website = StringField()
@@ -62,6 +62,7 @@ class Body(Document, OParlDocument):
         doc['paper'] = "%s/body/%s/paper" % (current_app.config['PROJECT_URL'], doc['_id'])
         doc['consultation'] = "%s/body/%s/consultation" % (current_app.config['PROJECT_URL'], doc['_id'])
         doc['locationList'] = "%s/body/%s/location" % (current_app.config['PROJECT_URL'], doc['_id'])
+        doc['legislativeTermList'] = "%s/body/%s/legislative_term" % (current_app.config['PROJECT_URL'], doc['_id'])
         doc['file'] = "%s/body/%s/file" % (current_app.config['PROJECT_URL'], doc['_id'])
         return doc
 

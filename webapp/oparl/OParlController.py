@@ -28,8 +28,8 @@ def root_redirect():
 def oparl_system():
     data = {
         "id": "%s/system" % (current_app.config['PROJECT_URL']),
-        "type": "https://schema.oparl.org/1.0/System",
-        "oparlVersion": "https://schema.oparl.org/1.0/",
+        "type": "https://schema.oparl.org/1.1/System",
+        "oparlVersion": "https://schema.oparl.org/1.1/",
         "body": "%s/bodies" % (current_app.config['PROJECT_URL']),
         "name": current_app.config['OPARL_NAME'],
         "contactEmail": current_app.config['OPARL_CONTACT_EMAIL'],
@@ -52,6 +52,7 @@ def oparl_bodies():
         .page(base_url='%s/bodies' % (current_app.config['PROJECT_URL']),page=page)
     return make_oparl_response(result)
 
+
 @oparl.route('/body-by-id')
 def oparl_body_id():
     original_id = urllib.parse.unquote_plus(request.args.get('id', None))
@@ -60,20 +61,12 @@ def oparl_body_id():
     data = Body.objects(originalId=original_id).resolve().first()
     return make_oparl_response(data)
 
+
 @oparl.route('/body/<string:id>')
 def oparl_body(id):
     data = Body.objects(pk=id).resolve().first()
     return make_oparl_response(data)
 
-@oparl.route('/body/<string:body_id>/legislative_term')
-def oparl_body_legislative_term(body_id):
-    page = request.args.get('page', type=int, default=1)
-    fastsync = request.args.get('fastsync', type=int, default=0)
-    result = LegislativeTerm.objects(**generate_filter_kwargs(body_id))\
-        .order_by('-modified')\
-        .resolve(page)\
-        .page(base_url='%s/body/%s/legislative_term' % (current_app.config['PROJECT_URL'], body_id), page=page)
-    return make_oparl_response(result)
 
 @oparl.route('/body/<string:body_id>/organization')
 def oparl_body_organization(body_id):
@@ -94,6 +87,7 @@ def oparl_body_person(body_id):
         .page(base_url='%s/body/%s/person' % (current_app.config['PROJECT_URL'], body_id), page=page)
     return make_oparl_response(result)
 
+
 @oparl.route('/body/<string:body_id>/membership')
 def oparl_body_membership(body_id):
     page = request.args.get('page', type=int, default=1)
@@ -102,6 +96,7 @@ def oparl_body_membership(body_id):
         .resolve(page)\
         .page(base_url='%s/body/%s/membership' % (current_app.config['PROJECT_URL'], body_id), page=page)
     return make_oparl_response(result)
+
 
 @oparl.route('/body/<string:body_id>/meeting')
 def oparl_body_meeting(body_id):
@@ -112,6 +107,7 @@ def oparl_body_meeting(body_id):
         .page(base_url='%s/body/%s/meeting' % (current_app.config['PROJECT_URL'], body_id), page=page)
     return make_oparl_response(result)
 
+
 @oparl.route('/body/<string:body_id>/agenda_item')
 def oparl_body_agenda_item(body_id):
     page = request.args.get('page', type=int, default=1)
@@ -120,6 +116,7 @@ def oparl_body_agenda_item(body_id):
         .resolve(page)\
         .page(base_url='%s/body/%s/agenda_item' % (current_app.config['PROJECT_URL'], body_id), page=page)
     return make_oparl_response(result)
+
 
 @oparl.route('/body/<string:body_id>/paper')
 def oparl_body_paper(body_id):
@@ -130,6 +127,7 @@ def oparl_body_paper(body_id):
         .page(base_url='%s/body/%s/paper' % (current_app.config['PROJECT_URL'], body_id), page=page)
     return make_oparl_response(result)
 
+
 @oparl.route('/body/<string:body_id>/consultation')
 def oparl_body_consultation(body_id):
     page = request.args.get('page', type=int, default=1)
@@ -138,6 +136,7 @@ def oparl_body_consultation(body_id):
         .resolve(page)\
         .page(base_url='%s/body/%s/consultation' % (current_app.config['PROJECT_URL'], body_id), page=page)
     return make_oparl_response(result)
+
 
 @oparl.route('/body/<string:body_id>/location')
 def oparl_body_location(body_id):
@@ -151,6 +150,20 @@ def oparl_body_location(body_id):
         .page(base_url='%s/body/%s/location' % (current_app.config['PROJECT_URL'], body_id), page=page)
     return make_oparl_response(result)
 
+
+@oparl.route('/body/<string:body_id>/legislative_term')
+def oparl_body_legislative_term(body_id):
+    page = request.args.get('page', type=int, default=1)
+    kwargs = generate_filter_kwargs(body_id)
+    kwargs['body__contains'] = body_id
+    del kwargs['body']
+    result = LegislativeTerm.objects(**kwargs)\
+        .order_by('-modified')\
+        .resolve(page)\
+        .page(base_url='%s/body/%s/legislative_term' % (current_app.config['PROJECT_URL'], body_id), page=page)
+    return make_oparl_response(result)
+
+
 @oparl.route('/body/<string:body_id>/file')
 def oparl_body_file(body_id):
     page = request.args.get('page', type=int, default=1)
@@ -159,6 +172,7 @@ def oparl_body_file(body_id):
         .resolve(page)\
         .page(base_url='%s/body/%s/file' % (current_app.config['PROJECT_URL'], body_id), page=page)
     return make_oparl_response(result)
+
 
 @oparl.route('/legislative_term/<string:id>')
 def oparl_legislative_term(id):
@@ -170,6 +184,7 @@ def oparl_legislative_term(id):
 def oparl_organization(id):
     data = Organization.objects(pk=id).resolve().first()
     return make_oparl_response(data)
+
 
 @oparl.route('/organization/<string:id>/meeting')
 def oparl_organization_meeting(id):
