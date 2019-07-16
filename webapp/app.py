@@ -15,7 +15,7 @@ from flask import Flask, request, render_template
 
 from webapp import config as Config
 from .common import Response
-from .common import constants as COMMON_CONSTANTS
+from .common.constants import BaseConfig
 from .common.filter import register_global_filters
 from .extensions import db
 
@@ -39,9 +39,10 @@ def launch(config=None, app_name=None, blueprints=None):
 
     app = Flask(
         app_name,
-        instance_path=COMMON_CONSTANTS.INSTANCE_FOLDER_PATH,
+        instance_path=BaseConfig.INSTANCE_FOLDER_PATH,
         instance_relative_config=True,
-        template_folder='webapp/templates')
+        template_folder=os.path.join(BaseConfig.PROJECT_ROOT, 'templates')
+    )
     configure_app(app, config)
     configure_hook(app)
     configure_blueprints(app, blueprints)
@@ -117,4 +118,16 @@ def configure_hook(app):
 
 
 def configure_error_handlers(app):
-    pass
+    @app.errorhandler(403)
+    def error_403(error):
+        return render_template('403.html'), 403
+
+    @app.errorhandler(404)
+    def error_404(error):
+        return render_template('404.html'), 404
+
+    @app.errorhandler(500)
+    def error_500(error):
+        from .extensions import logger
+        logger.critical('app', str(error), traceback.format_exc())
+        return render_template('500.html'), 500

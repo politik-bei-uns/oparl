@@ -11,10 +11,10 @@ services:
       - .:/app
     entrypoint: ["python3", "runserver.py"]
     networks:
-      shared_politk-bei-uns:
+      shared_politik-bei-uns:
         aliases:
           - oparl
 
 networks:
-  shared_politk-bei-uns:
+  shared_politik-bei-uns:
     external: true

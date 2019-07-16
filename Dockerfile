@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 LABEL maintainer "Ernesto Ruge <mail@ernestoruge.de>"
 ENV PYTHONUNBUFFERED 1
 ENV DEBIAN_FRONTEND noninteractive
@@ -15,8 +15,8 @@ RUN apt-get update && \
     apt-get autoremove -y && \
     apt-get clean
 
-RUN groupadd -g 1001 webdev
-RUN useradd -u 1001 -g webdev -m -d /home/webdev -s /bin/bash webdev
+RUN groupadd -g 1002 webdev
+RUN useradd -u 1002 -g webdev -m -d /home/webdev -s /bin/bash webdev
 
 ENV HOME /home/webdev
 

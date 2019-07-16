@@ -12,5 +12,36 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 import os
 
-# Instance folder path, make it independent.
-INSTANCE_FOLDER_PATH = os.path.join('/tmp', 'instance')
+
+class BaseConfig:
+    INSTANCE_FOLDER_PATH = os.path.join('/tmp', 'instance')
+
+    PROJECT_NAME = "politik-bei-uns-oparl"
+    PROJECT_VERSION = '2.1.0'
+
+    PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), os.pardir))
+    LOG_DIR = os.path.abspath(os.path.join(PROJECT_ROOT, os.pardir, 'logs'))
+
+    DEBUG = False
+    TESTING = False
+    S3_DEBUG = False
+
+    MAIL_PORT = 587
+    MAIL_USE_SSL = False
+    MAIL_USE_TLS = True
+
+    MONGODB_HOST = 'localhost'
+    MONGODB_PORT = 27017
+    MONGODB_DB = 'oparl'
+
+    OPARL_NAME = ''
+    OPARL_CONTACT_NAME = ''
+    OPARL_CONTACT_EMAIL = ''
+    OPARL_WEBSITE = ''
+    OPARL_VENDOR = ''
+    OPARL_PRODUCT = ''
+    OPARL_CREATED = ''
+    OPARL_MODIFIED = ''
+
+    ITEMS_PER_PAGE = 100
+    VENDOR_PREFIX = 'oparl'

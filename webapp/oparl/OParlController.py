@@ -49,7 +49,7 @@ def oparl_bodies():
     result = Body.objects(**generate_filter_kwargs())\
         .order_by('-modified')\
         .resolve(page)\
-        .page(base_url='%s/bodies' % (current_app.config['PROJECT_URL']),page=page)
+        .page(base_url='%s/bodies' % current_app.config['PROJECT_URL'], page=page)
     return make_oparl_response(result)
 
 
